@@ -1,0 +1,24 @@
+{
+  "name": "signal-and-scale",
+  "version": "1.0.0",
+  "description": "Signal & Scale careers and secure applicant administration",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "db:migrate": "node scripts/migrate.mjs",
+    "admin:code": "node scripts/admin-code.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@vercel/functions": "^3.9.9",
+    "drizzle-orm": "^0.45.3",
+    "pg": "^8.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
+  },
+  "private": true
+}
