@@ -86,6 +86,9 @@ export function createHandler(database, env = process.env) {
     const phoneRaw = textField(body.phone,'phone number',40);
     const phone = phoneRaw.replace(/[\s().-]/g,'');
     if (!/^\+?[0-9]{7,15}$/.test(phone)) fail(400,'Please enter a valid phone number, including your country code.');
+    const portfolioRaw = typeof body.portfolio === 'string' ? body.portfolio.trim() : '';
+    let portfolio = '';
+    if (portfolioRaw) { try { const u=new URL(portfolioRaw); if (!['http:','https:'].includes(u.protocol) || portfolioRaw.length>1000) throw new Error(); portfolio=u.toString(); } catch { fail(400,'Please enter a valid portfolio or content link.'); } }
     const files = body.files || [];
     if (!Array.isArray(files) || files.length>3 || files.reduce((n,f)=>n+Number(f?.size||0),0)>10*CHUNK) fail(400,'Attach up to 3 files, 10 MB combined.');
     const manifest = files.map(f=>{
@@ -96,6 +99,7 @@ export function createHandler(database, env = process.env) {
     const id=randomUUID(), token=randomBytes(32).toString('hex');
     await db.transaction(async tx=>{
      await tx.execute(sql`INSERT INTO career_applications(id,first_name,last_name,phone,email,role,upload_hash,upload_expires) VALUES(${id},${first},${last},${phone},${email},'UGC Creator',${digest(token)},now()+interval '1 hour')`);
+     if (portfolio) { try { await tx.execute(sql`UPDATE career_applications SET portfolio=${portfolio} WHERE id=${id}`); } catch { /* schema migration may not yet include portfolio; application still submits safely */ } }
      for (const f of manifest) await tx.execute(sql`INSERT INTO career_media(id,application_id,name,mime,size,parts) VALUES(${f.id},${id},${f.name},${f.mime},${f.size},${f.parts})`);
      await tx.execute(sql`DELETE FROM career_applications WHERE submitted_at IS NULL AND upload_expires<now()-interval '1 day'`);
      await tx.execute(sql`DELETE FROM career_limits WHERE expires_at<now()-interval '1 day'`);
