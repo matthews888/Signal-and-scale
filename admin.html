@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Admin — Signal &amp; Scale</title><link rel="stylesheet" href="/assets/admin.css"></head>
+<body><header><a class="logo" href="/">signal<span>&amp;</span>scale.</a><span class="admin-label">Admin</span><button id="logout" class="secondary" hidden>Sign out</button></header>
+<main>
+<section id="login-panel" class="login-card" hidden><span class="eyebrow">Private access</span><h1>Admin sign in</h1><p>Enter your six-digit access code.</p><form id="login-form"><label for="code">Access code</label><input id="code" name="code" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="current-password" required><button type="submit">Sign in</button></form><p id="login-status" role="status"></p></section>
+<p id="loading" role="status">Loading admin…</p>
+<section id="dashboard" hidden><div class="page-heading"><div><span class="eyebrow">Careers</span><h1>Applications</h1></div><button id="refresh" class="secondary">Refresh</button></div>
+<div class="count-card"><span>Total applicants</span><strong id="total">—</strong><span class="count-caption">Submitted applications</span></div>
+<h2>CSV downloads</h2><div class="download-grid">
+<article class="download-card"><span class="file-type">CSV</span><h3>Phone numbers.csv</h3><p>First name, last name and phone number.</p><span class="record-count">— applicants</span><button data-download="/api/careers?action=csv&amp;kind=phones" data-filename="phone-numbers.csv">Download CSV ↓</button></article>
+<article class="download-card"><span class="file-type">CSV</span><h3>Emails.csv</h3><p>First name, last name and email address.</p><span class="record-count">— applicants</span><button data-download="/api/careers?action=csv&amp;kind=emails" data-filename="emails.csv">Download CSV ↓</button></article>
+</div><p class="note">Each download includes all submitted applicants, with the latest details.</p><p id="dashboard-status" role="status"></p>
+<div class="applications-heading"><h2>Applicants</h2><span id="page-label"></span></div><div id="applications"></div><div class="pagination"><button id="previous" class="secondary">Previous</button><button id="next" class="secondary">Next</button></div></section>
+</main><script type="module" src="/assets/admin.js"></script></body></html>
