@@ -28,6 +28,8 @@ test('applications, private media, admin sessions, exports and rate limiting',as
  assert.equal((await call('csv&kind=phones')).statusCode,401);
  assert.equal((await call('login',{method:'POST',body:{code:'123456'},requestOrigin:'https://attacker.test'})).statusCode,403);
  const login=await call('login',{method:'POST',body:{code:'123456'}});assert.equal(login.statusCode,200);
+ const aliased=new Response();await createHandler(db,{SITE_ORIGIN:origin,Clientpassword:'123456'})({url:'/api/careers?action=login',method:'POST',body:{code:'123456'},headers:{origin,'content-type':'application/json','x-vercel-forwarded-for':'192.0.2.3'}},aliased);
+ assert.equal(aliased.statusCode,200,'The existing Vercel secret name is accepted');
  assert.match(login.headers['set-cookie'],/HttpOnly; Secure; SameSite=Strict/);const cookie=login.headers['set-cookie'].split(';')[0];
  const applicant={first_name:'=2+2',last_name:'O’Neil, "Jo"',phone:'+61 400 000 000',email:'Test@Example.com',files:[]};
  const start=await call('start',{method:'POST',body:applicant});assert.equal(start.statusCode,201,start.text);

@@ -16,9 +16,10 @@ function textField(value, name, max) {
 export function createHandler(database, env = process.env) {
  // ADMIN_CODE is a server-only Vercel secret for simple owner setup.
  // Prefer ADMIN_CODE_HASH when provisioning via the supplied local helper.
- const storedHash = env.ADMIN_CODE_HASH || (/^\d{6}$/.test(env.ADMIN_CODE || '') ? (()=>{
+ const adminCode = env.ADMIN_CODE ?? env.Clientpassword;
+ const storedHash = env.ADMIN_CODE_HASH || (/^\d{6}$/.test(adminCode || '') ? (()=>{
   const salt=digest('signal-and-scale:'+env.SITE_ORIGIN).slice(0,32);
-  return salt+':'+scryptSync(env.ADMIN_CODE,salt,32).toString('hex');
+  return salt+':'+scryptSync(adminCode,salt,32).toString('hex');
  })() : '');
  env={...env,ADMIN_CODE_HASH:storedHash};
  return async function handler(req, res) {

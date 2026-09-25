@@ -18,7 +18,7 @@ The code is prepared on `careers-application-form`. Do not promote it to product
 2. Configure these Vercel server environment variables:
    - `DATABASE_URL`: the database connection URL; use a pooled URL for Neon runtime traffic.
    - `SITE_ORIGIN`: `https://signal-and-scale.vercel.app` (change if a custom domain becomes canonical).
-   - `ADMIN_CODE`: a private, reusable six-digit code stored as a Sensitive Vercel environment variable. Alternatively, use `ADMIN_CODE_HASH`, generated with `npm run admin:code`. The plaintext code is never embedded in HTML or committed.
+   - `ADMIN_CODE`: a private, reusable six-digit code stored as a Sensitive Vercel environment variable. The existing production secret is named `Clientpassword`, which the server also accepts. Alternatively, use `ADMIN_CODE_HASH`, generated with `npm run admin:code`. The plaintext code is never embedded in HTML or committed.
 3. Vercel builds automatically apply the additive migration in `db/0001_careers.sql` using `DATABASE_URL_UNPOOLED` when available. For manual setup, use `npm run db:migrate`.
 4. Run `npm ci`, `npm test` and `npm run build`. Vercel uses `vercel.json` to build only public frontend files and deploy the API separately.
 5. Deploy and verify one test application, admin sign-in, both CSV downloads, media download and logout. Use a preview database for test applicants; never leave test applicants in the production count.
